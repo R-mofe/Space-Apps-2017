@@ -1,0 +1,208 @@
+package AlgorithmGenetico;
+import java.util.Random;
+import javax.swing.JOptionPane;
+
+        
+public class AlgorithmGenetico {
+    
+    static int filas=6; 
+    static int colum=7;
+    static int NResultados=4; 
+    
+    
+    
+    static String [] [] Poblacion = new String [filas][colum];
+    static String [] [] PoblacionTem = new String [filas][colum];
+    static String [] parejas = new String [filas];//[colum];
+    static String []  Resultados = new String [NResultados];
+   // static String [] ParejaA = new String [ParejaA];
+    static double sumatoria=0;
+    
+
+    
+/* Comienzo de la poblacion inicial de individuos */
+
+public static void InicioPoblacion(String [][] Poblacion){
+
+System.out.println("************************************************");
+System.out.println("******************Inicio Poblacion ***************");
+System.out.println("************************************************");
+String Cromosomas = "";
+Random ri = new Random();
+for(int i=0; i< parejas.length;i++){
+    Cromosomas = "";
+    for(int j=0;j<5;j++){
+        
+        Cromosomas+=ri.nextInt(2)+",";
+        
+        
+    } 
+    Poblacion [i][0] =""+i;
+    Poblacion [i][1] =Cromosomas;
+    
+}
+}
+
+    /*Ecuacion que estudia la adaptabilidad del Individuo */
+    
+    public static double calidad_(String [][] Poblacion){
+        
+        //columna donde obtiene el valor del individuo
+        
+        double mayor=Double.parseDouble(Poblacion[0][2]);
+        double valor=0;
+        for (int i=0; i<parejas.length;i++){
+            
+         //se evaluo con la funcion x al cuadrado 
+         valor=funcion_Fx(Double.parseDouble(Poblacion[i][2]));
+            
+         //valor=funcion_Fx2(Double.parseDouble(Poblacion[i][2]));
+         //se coloca en la columna 3
+         Poblacion [i][3]=""+valor;
+         // se busca rl mayor valor de todos , ese seria el mejor adaptado
+         
+         if(mayor<valor){
+             
+             mayor=valor;
+             
+             
+            }
+         
+         }
+            
+          System.out.println("*******Mejor Adaptado*********");
+          System.out.println("************"+mayor+"************");
+          //System.out.println("************************************************");
+           
+          return(mayor);
+          
+    }
+         public static void Combinacion_Mutuacion(String [][] Poblacion, String[][] PoblacionTem){
+             
+              System.out.println("*******Combinaciones & Mutuacion*********");
+              System.out.println("************************************************");
+             
+             Random ri = new Random (); // aleatorio para la parte de la combinacion    
+             
+             int Cruce=0; 
+             
+             String [] CromosomaA;
+             String [] CromosomaB;
+             String ParejaA ;
+             
+             
+             for(int i=0;i<filas/2;i++){
+                 
+                 
+                 CromosomaA=Poblacion [i][1].split(",");
+                 ParejaA = parejas [i];
+                 String CadAdn="";
+                 CromosomaB=Poblacion[Integer.parseInt(ParejaA)][1].split(",");
+                 Cruce=ri.nextInt(4); //punto de cruces 
+                 System.out.println("Cruce ["+Cruce+"]["+Poblacion[i][0]+"]["+Poblacion[i][1]+"]"+ "[Cruzado con] ["+Poblacion[Integer.parseInt(ParejaA)][0]+"]"+"["+Poblacion[Integer.parseInt(ParejaA)][1]+"]");
+                 //genes del Primer  Cromosoma
+                 for(int t=0;t<Cruce;t++){
+                     
+                     
+                     CadAdn+=CromosomaA[t]+",";
+                     }
+                        //genes del segundo Cromosoma
+                        for(int t=0;t<Cruce;t++){
+                            
+                           CadAdn+=CromosomaB[t]+",";
+                        
+                        }
+                
+                 System.out.println("NUEVO CROMOSOMA["+CadAdn+"]");
+                 PoblacionTem[i][0]=""+1;
+                 PoblacionTem[i][1]=CadAdn;
+       
+                 }//for de parejas
+             for(int i=0; i<parejas.length;i++){
+                 Poblacion [i][0]=PoblacionTem[i][0];
+                 Poblacion [i][1]=PoblacionTem[i][1];  
+                 
+             }// se muta un gen despues de la combinacion
+                 int mutado =(parejas.length/2)+1;
+                 CromosomaA=Poblacion[mutado][1].split("");
+                 System.out.println("****************Mutacion*************");
+                 System.out.println("*********Cromosoma********Resultado**********");
+                 int gen=ri.nextInt(4);// gen aleatorio
+                 if(CromosomaA[gen].equals("0")){
+                     
+                    CromosomaA[gen]="1";
+                 }else{
+                            CromosomaA[gen]="0";
+                            
+                           }
+                     
+                       // se crea la cadena de ADN para mutar el gen
+                       
+                       String CadAdn="";
+                       
+                        for(int t=0;t<CromosomaA.length;t++){
+                           CadAdn+=CromosomaA[t]+","; 
+                            
+                        }
+                        //System.out.println("mutado --->"+CadAdn);
+                        
+                        System.out.println("["+Poblacion[mutado][0]+"]"+"["+Poblacion[mutado][1]+"]"+"Gen mutado"+" ["+gen+"] Resultado=>["+Poblacion[mutado][0]+"]"+"["+CadAdn+"]");
+                        Poblacion[mutado][1]= CadAdn; // se adiciona el mutado a la poblacion
+                        
+           }//Combinacion_Mutacion
+         
+         //Los mejores Individuos pueden copiarse, sacar copia de si mismo
+         public static void Duplicar(String [][] Poblacion, String [][] PoblacionTem){
+             
+             
+             System.out.println("********************Duplicarse************");
+             
+             
+            
+             
+             
+             
+             
+             
+         }
+         
+         
+         
+         
+         
+             // aplicando un metodo para ver los ganadores de Cada Torneo
+                 
+                 
+                
+            public static void VerGanadores(String [] Ganadores){
+             
+                System.out.println("********************Ganadores*****************");
+                int gano=0;
+                //for para ver los ganadores
+                for(int i=0;i<Ganadores.length;i++){
+                    
+                    
+                    gano=Integer.parseInt(Ganadores[i]);
+                    System.out.println("["+Poblacion[gano][0]+"]["+Poblacion[gano][1]+"]["+Poblacion[gano][2]+"]"+"["+Poblacion[gano][3]+"]");
+                    
+                    
+         }//for
+                
+               
+         }//verGanadores  
+            
+            
+           public static void Torneo(String [][] Poblacion) {
+               
+               System.out.println("********************Torneo*****************");
+               
+               
+           }
+            
+            
+
+    private static double funcion_Fx(double parseDouble) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+}
+            
